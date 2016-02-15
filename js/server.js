@@ -9,11 +9,6 @@ var ip = getIp();
 
 var startTime = curentDateTime();
 
-var handlerMap = {
-    "GET": getHandler,
-    "OPTIONS": optionsHandler
-};
-
 var errStatusMap = {
     "Deleting non-existent message": 422,
     "Rollback non-existent message": 422,
@@ -29,8 +24,7 @@ var errStatusMap = {
 var server = http.createServer(function(req, res) {
     console.log('method: ' + req.method + ", " + req.url);
 
-    var handler = handlerMap[req.method];
-    if (handler == undefined) {
+    if (req.method != "GET") {
         responseWith(res, Error("Unsuported http request"));
     }
 
@@ -100,11 +94,6 @@ function getHandler(req, res, continueWith) {
         }
         remaineWait(req, res, continueWith);
     });
-}
-
-function optionsHandler(req, res, continueWith) {
-    res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    continueWith();
 }
 
 function remaineWait(req, res, continueWith) {
