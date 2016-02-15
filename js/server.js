@@ -11,10 +11,7 @@ var startTime = curentDateTime();
 
 var handlerMap = {
     "GET": getHandler,
-    "OPTIONS": optionsHandler,
-    "DELETE": deleteHandler,
-    "POST": postHandler,
-    "PUT": putHandler
+    "OPTIONS": optionsHandler
 };
 
 var errStatusMap = {
@@ -105,48 +102,9 @@ function getHandler(req, res, continueWith) {
     });
 }
 
-function postHandler(req, res, continueWith) {
-    awaitBody(req, function(message) {
-        history.addMessage(message, function(err) {
-            if (err) {
-                continueWith(err);
-            } else {
-                respondAll();
-                continueWith();
-            }
-        });
-    });
-}
-
 function optionsHandler(req, res, continueWith) {
     res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     continueWith();
-}
-
-function putHandler(req, res, continueWith) {
-    awaitBody(req, function(message) {
-        history.editMessage(message, function(err) {
-            if (err) {
-                continueWith(err);
-            } else {
-                respondAll();
-                continueWith();
-            }
-        });
-    });
-}
-
-function deleteHandler(req, res, continueWith) {
-    awaitBody(req, function(message) {
-        history.deleteMessage(message, function(err) {
-            if (err) {
-                continueWith(err);
-            } else {
-                respondAll();
-                continueWith();
-            }
-        });
-    });
 }
 
 function remaineWait(req, res, continueWith) {
