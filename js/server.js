@@ -37,7 +37,7 @@ var server = http.createServer(function(req, res) {
         responseWith(res, Error("Unsuported http request"));
     }
 
-    handlerMap[req.method](req, res, function(err) {
+    getHandler(req, res, function(err) {
         responseWith(res, err);
     });
 });
