@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node index.js"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "engines": {
     "node": "4.1.0"
   },
@@ -16,5 +15,8 @@
     "url": "git+https://github.com/MargoGrodno/Chat.git"
   },
   "author": "MargoGrodno",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "soap": "^0.12.0"
+  }
 }

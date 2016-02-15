@@ -2,6 +2,7 @@ var http = require('http');
 var url = require('url');
 var getIp = require('./getIp');
 var historyMod = require('./history');
+var ratesService = require('./ratesService');
 
 var history = new historyMod.History();
 var toBeResponded = [];
@@ -68,8 +69,7 @@ function getHandler(req, res, continueWith) {
     if (req.url == "/") {
         continueWith({
             status: "Running",
-            startTime: startTime,
-            curentToken: history.getToken()
+            startTime: startTime
         });
         return;
     }
@@ -78,48 +78,6 @@ function getHandler(req, res, continueWith) {
         continueWith(Error("Bad Request"));
         return;
     }
-
-    history.getMessages(urlToken, function(answer, error) {
-        if (error !== undefined) {
-            continueWith(error);
-            return;
-        }
-        if (answer !== undefined) {
-            var body = {
-                token: history.getToken(),
-                messages: answer
-            };
-            continueWith(body);
-            return;
-        }
-        remaineWait(req, res, continueWith);
-    });
-}
-
-function remaineWait(req, res, continueWith) {
-    toBeResponded.push({
-        request: req,
-        response: res,
-        continueWith: continueWith
-    });
-}
-
-function respondAll() {
-    toBeResponded.forEach(function(waiter) {
-        getHandler(waiter.request, waiter.response, waiter.continueWith);
-    });
-    toBeResponded = [];
-}
-
-function awaitBody(req, handler) {
-    var reqBody = '';
-    req.on('data', function(data) {
-        reqBody += data.toString();
-    });
-
-    req.on('end', function() {
-        handler(JSON.parse(reqBody));
-    });
 }
 
 function getUrlToken(u) {
